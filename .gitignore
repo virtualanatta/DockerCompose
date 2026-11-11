@@ -1,4 +1,4 @@
-mysql_data/
 .env
+mysql_data/
 *.bak
 *.log

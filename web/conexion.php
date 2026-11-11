@@ -1,14 +1,14 @@
-<?php 
+<?php
+// Credenciales definidas en .env y pasadas al contenedor por docker-compose.yml
+$conn = mysqli_connect(
+    getenv('DB_HOST') ?: 'mysql',
+    getenv('DB_USER'),
+    getenv('DB_PASSWORD'),
+    getenv('DB_NAME')
+);
 
-$servername="mysql";
-$username="root";
-$rootpass="rootpass"; //si se esta en clase cambiar el rootpass a ($rootpass="AlumnoIFP";)
-$database="login_app"; //se le tiene que llamar a la base de datos users1
-
-$conn = mysqli_connect($servername,$username,$rootpass,$database);
-
-if(!$conn){
-    die("Conexión fallida");
+if (!$conn) {
+    error_log('Error de conexión a MySQL: ' . mysqli_connect_error());
+    http_response_code(500);
+    die('Servicio no disponible');
 }
-
-?>

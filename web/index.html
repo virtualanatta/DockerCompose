@@ -39,6 +39,7 @@
 								</ul>
 							</li>
 							<li><a href="elements.html">Elements</a></li>
+							<li><a href="acceso.php">Log In</a></li>
 							<li><a href="registro.php" class="button primary">Sign Up</a></li>
 						</ul>
 					</nav>
@@ -214,120 +215,4 @@
 			<script src="assets/js/main.js"></script>
 
 	</body>
-</html>
-<!-- Auth Modal -->
-<script>
-    const authModal = document.getElementById('authModal') || (function() {
-        const div = document.createElement('div');
-        div.id = 'authModal';
-        div.className = 'auth-modal';
-        div.innerHTML = `
-            <div class="auth-container">
-                <button class="auth-close" id="closeAuth">&times;</button>
-                <div class="auth-tabs">
-                    <div class="auth-tab active" data-tab="login">Login</div>
-                    <div class="auth-tab" data-tab="register">Register</div>
-                </div>
-                <form id="loginForm" class="form-content active" action="acceso.php" method="POST">
-                    <div class="form-group"><label>Email</label><input type="email" name="email" required></div>
-                    <div class="form-group"><label>Password</label><input type="password" name="password" required></div>
-                    <button type="submit" class="btn-submit">Sign In</button>
-                </form>
-                <form id="registerForm" class="form-content" action="registro.php" method="POST">
-                    <div class="form-group"><label>Name</label><input type="text" name="name" required></div>
-                    <div class="form-group"><label>Email</label><input type="email" name="email" required></div>
-                    <div class="form-group"><label>Password</label><input type="password" name="password" required minlength="6"></div>
-                    <button type="submit" class="btn-submit">Sign Up</button>
-                </form>
-            </div>
-        `;
-        document.body.appendChild(div);
-        return div;
-    })();
-    
-    window.openAuthModal = (tab = 'login') => {
-        authModal.classList.add('show');
-        document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-        document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
-        document.querySelectorAll('.form-content').forEach(f => f.classList.remove('active'));
-        document.getElementById(tab === 'login' ? 'loginForm' : 'registerForm').classList.add('active');
-    };
-    
-    document.addEventListener('click', function(e) {
-        if(e.target.id === 'closeAuth' || e.target === authModal) authModal.classList.remove('show');
-    });
-</script>
-
-<style>
-    .auth-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1050; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; }
-    .auth-modal.show { display: flex; }
-    .auth-container { background: white; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); width: 100%; max-width: 420px; padding: 40px; position: relative; }
-    .auth-close { position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 28px; cursor: pointer; }
-    .auth-tabs { display: flex; border-bottom: 2px solid #f0f0f0; margin-bottom: 30px; gap: 20px; }
-    .auth-tab { flex: 1; padding: 12px 0; text-align: center; font-weight: 600; color: #999; cursor: pointer; border-bottom: 3px solid transparent; }
-    .auth-tab.active { color: #32b8c6; border-bottom-color: #32b8c6; }
-    .form-content { display: none; }
-    .form-content.active { display: block; }
-    .form-group { margin-bottom: 20px; }
-    .form-group label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px; }
-    .form-group input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
-    .form-group input:focus { outline: none; border-color: #32b8c6; box-shadow: 0 0 0 3px rgba(50,184,198,0.1); }
-    .btn-submit { width: 100%; padding: 12px; background: #32b8c6; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
-
-<!-- MODAL AUTH PROFESIONAL -->
-<div id="authModalpro" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; align-items:center; justify-content:center;">
-  <div style="background:white; border-radius:12px; padding:40px; width:90%; max-width:420px; box-shadow:0 10px 40px rgba(0,0,0,0.3);">
-    
-    <!-- BOTÓN X CERRAR -->
-    <button onclick="document.getElementById('authModalpro').style.display='none'" style="position:absolute; top:20px; right:20px; background:none; border:none; font-size:28px; cursor:pointer; color:#999;">&times;</button>
-    
-    <!-- TABS -->
-    <div style="display:flex; border-bottom:2px solid #f0f0f0; margin-bottom:30px;">
-      <button onclick="document.querySelector('.loginform').style.display='block'; document.querySelector('.registerform').style.display='none'; this.style.color='#32b8c6'; this.style.borderBottom='3px solid #32b8c6'; document.querySelectorAll('[data-tab]')[1].style.color='#999'; document.querySelectorAll('[data-tab]')[1].style.borderBottom='3px solid transparent';" data-tab="login" style="flex:1; padding:12px; background:none; border:none; border-bottom:3px solid #32b8c6; font-weight:600; color:#32b8c6; cursor:pointer; font-size:15px;">Login</button>
-      <button onclick="document.querySelector('.registerform').style.display='block'; document.querySelector('.loginform').style.display='none'; this.style.color='#32b8c6'; this.style.borderBottom='3px solid #32b8c6'; document.querySelectorAll('[data-tab]')[0].style.color='#999'; document.querySelectorAll('[data-tab]')[0].style.borderBottom='3px solid transparent';" data-tab="register" style="flex:1; padding:12px; background:none; border:none; border-bottom:3px solid transparent; font-weight:600; color:#999; cursor:pointer; font-size:15px;">Register</button>
-    </div>
-    
-    <!-- LOGIN FORM -->
-    <form action="acceso.php" method="POST" class="loginform" style="display:block;">
-      <div style="margin-bottom:20px;">
-        <label style="display:block; margin-bottom:8px; font-weight:500; color:#333; font-size:14px;">Email</label>
-        <input type="email" name="email" placeholder="your@email.com" required style="width:100%; padding:12px; border:1px solid #ddd; border-radius:6px; font-size:14px; color:#333; box-sizing:border-box;">
-      </div>
-      <div style="margin-bottom:20px;">
-        <label style="display:block; margin-bottom:8px; font-weight:500; color:#333; font-size:14px;">Password</label>
-        <input type="password" name="password" placeholder="••••••••" required style="width:100%; padding:12px; border:1px solid #ddd; border-radius:6px; font-size:14px; color:#333; box-sizing:border-box;">
-      </div>
-      <button type="submit" name="submit" style="width:100%; padding:12px; background:#32b8c6; color:white; border:none; border-radius:6px; font-weight:600; cursor:pointer; font-size:14px;">Sign In</button>
-    </form>
-    
-    <!-- REGISTER FORM -->
-    <form action="registro.php" method="POST" class="registerform" style="display:none;">
-      <div style="margin-bottom:20px;">
-        <label style="display:block; margin-bottom:8px; font-weight:500; color:#333; font-size:14px;">Username</label>
-        <input type="text" name="username" placeholder="johndoe" required style="width:100%; padding:12px; border:1px solid #ddd; border-radius:6px; font-size:14px; color:#333; box-sizing:border-box;">
-      </div>
-      <div style="margin-bottom:20px;">
-        <label style="display:block; margin-bottom:8px; font-weight:500; color:#333; font-size:14px;">Email</label>
-        <input type="email" name="email" placeholder="your@email.com" required style="width:100%; padding:12px; border:1px solid #ddd; border-radius:6px; font-size:14px; color:#333; box-sizing:border-box;">
-      </div>
-      <div style="margin-bottom:20px;">
-        <label style="display:block; margin-bottom:8px; font-weight:500; color:#333; font-size:14px;">Password</label>
-        <input type="password" name="password" placeholder="••••••••" required style="width:100%; padding:12px; border:1px solid #ddd; border-radius:6px; font-size:14px; color:#333; box-sizing:border-box;">
-      </div>
-      <div style="margin-bottom:20px;">
-        <label style="display:block; margin-bottom:8px; font-weight:500; color:#333; font-size:14px;">Confirm Password</label>
-        <input type="password" name="cpassword" placeholder="••••••••" required style="width:100%; padding:12px; border:1px solid #ddd; border-radius:6px; font-size:14px; color:#333; box-sizing:border-box;">
-      </div>
-      <button type="submit" name="submit" style="width:100%; padding:12px; background:#32b8c6; color:white; border:none; border-radius:6px; font-weight:600; cursor:pointer; font-size:14px;">Sign Up</button>
-    </form>
-  </div>
-</div>
-
-<script>
-function openAuthModal() {
-  document.getElementById('authModalpro').style.display = 'flex';
-}
-</script>
-
-</body>
 </html>

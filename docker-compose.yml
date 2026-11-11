@@ -1,38 +1,58 @@
 services:
   nginx:
-    image: nginx:alpine
+    image: nginx:1.27-alpine
     container_name: pr1_nginx
-    ports: ["8082:80"]
+    ports:
+      - "8082:80"
     volumes:
-      - ./web:/var/www/html
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-    depends_on: [php]
+      - ./web:/var/www/html:ro
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - php
     networks: [pr1-net]
 
   php:
     build: .
     container_name: pr1_php
-    volumes: ['./web:/var/www/html']
+    environment:
+      DB_HOST: mysql
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./web:/var/www/html:ro
+    depends_on:
+      mysql:
+        condition: service_healthy
     networks: [pr1-net]
 
   mysql:
     image: mysql:8.0
     container_name: pr1_mysql
     environment:
-      MYSQL_ROOT_PASSWORD: rootpass
-      MYSQL_DATABASE: login_app
-    volumes: ['./mysql_data:/var/lib/mysql']
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
     networks: [pr1-net]
 
   phpmyadmin:
-    image: phpmyadmin:latest
+    image: phpmyadmin:5
     container_name: pr1_phpmyadmin
     environment:
       PMA_HOST: mysql
-      PMA_USER: root
-      PMA_PASSWORD: rootpass
-    ports: ["8081:80"]
-    depends_on: [mysql]
+    ports:
+      - "127.0.0.1:8081:80"
+    depends_on:
+      - mysql
     networks: [pr1-net]
 
 networks:
